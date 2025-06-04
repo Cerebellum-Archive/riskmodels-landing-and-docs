@@ -1,0 +1,95 @@
+# Portfolio Optimizer
+
+The Multi-Period Portfolio Optimizer is a powerful tool designed for optimizing long/short equity portfolios. It provides a sophisticated approach to portfolio management by considering multiple time horizons and various constraints.
+
+## Key Features
+
+- **Multi-Period Optimization**: Handles multiple investment horizons simultaneously
+- **Risk Management**: Incorporates covariance risk metrics
+- **Factor Integration**: Accounts for factor exposures in the optimization process
+- **Sector Neutrality**: Supports sector-neutral portfolio construction
+- **Flexible Constraints**: Configurable leverage and position size limits
+
+## Implementation Example
+
+Here's how to use the Portfolio Optimizer:
+
+```python
+import numpy as np
+from optimizer import MPOptimizer
+
+# 1. Initialize your data
+n_stocks = 10
+n_horizons = 3
+expected_returns = np.random.randn(n_stocks, n_horizons) * 0.02
+current_allocations = np.random.uniform(-0.05, 0.10, (n_stocks, 1))
+
+# 2. Configure the optimizer
+config = {
+    "objective_params": {
+        "lambda": [1, 0.1, 0.1, 0],
+        "cov_risk": cov_risk,
+        "factor_exposures": factor_exposures,
+        "sector_memberships": sector_memberships
+    },
+    "constraints": {
+        "max_leverage": 1.5,
+        "min_weight": -0.05,
+        "max_weight": 0.10,
+        "sector_neutral": True
+    },
+    "solver_options": {
+        "solver": "GUROBI",
+        "tol": 1e-6,
+        "max_iters": 1000
+    }
+}
+
+# 3. Run the optimization
+optimizer = MPOptimizer(expected_returns, current_allocations, config)
+optimal_weights = optimizer.solve()
+```
+
+## Configuration Options
+
+### Objective Parameters
+
+- `lambda`: Weight factors for different optimization objectives
+- `cov_risk`: Covariance risk matrix
+- `factor_exposures`: Factor exposure matrix
+- `sector_memberships`: Sector classification matrix
+
+### Constraints
+
+- `max_leverage`: Maximum allowed portfolio leverage (e.g., 1.5)
+- `min_weight`: Minimum position size (e.g., -5%)
+- `max_weight`: Maximum position size (e.g., 10%)
+- `sector_neutral`: Boolean flag for sector neutrality
+
+### Solver Options
+
+- `solver`: Choice of optimization solver (e.g., "GUROBI")
+- `tol`: Convergence tolerance
+- `max_iters`: Maximum iteration limit
+
+## Requirements
+
+- NumPy for numerical computations
+- CVXPY for optimization
+- Matplotlib for visualization (optional)
+- GUROBI or another compatible solver
+
+## Performance Considerations
+
+The optimizer is designed to handle portfolios with:
+
+- Multiple time horizons
+- Large number of assets
+- Complex constraint structures
+- Factor-based optimization objectives
+
+For best performance, consider:
+
+- Using sparse matrices for large portfolios
+- Adjusting solver tolerance for speed/accuracy tradeoff
+- Implementing proper risk constraints
